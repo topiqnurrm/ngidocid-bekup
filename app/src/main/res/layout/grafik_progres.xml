@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Tombol Refresh Grafik -->
+        <Button
+            android:id="@+id/btnRefreshGrafik"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Refresh Grafik"
+            android:backgroundTint="#2196F3"/> <!-- Warna biru -->
+
+        <!-- Tombol Reset Grafik -->
+        <Button
+            android:id="@+id/btnResetGrafik"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Reset Grafik"
+            android:backgroundTint="#F44336"/> <!-- Warna merah -->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Chart Container -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/weightProgressChart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"/>
+
+        <!-- Button to report progress -->
+        <Button
+            android:id="@+id/btnLaporkanProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Laporkan Progress"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"> <!-- Mengatur background layout menjadi putih -->
+
+    <!-- Tombol Daftar dengan latar belakang hijau -->
+    <Button
+        android:id="@+id/btnDaftar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daftar"
+        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:background="#4CAF50" />
+
+    <!-- Tombol Dashboard dengan latar belakang biru -->
+    <Button
+        android:id="@+id/btnDashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dashboard"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/btnDaftar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="#2196F3" />
+    <LinearLayout
+        android:id="@+id/framelinear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+</RelativeLayout>
