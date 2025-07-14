@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#4CAF50"/> <!-- Warna biru untuk indikator aktif -->
-    <size android:width="12dp" android:height="12dp"/> <!-- Ukuran indikator -->
-    <corners android:radius="6dp"/> <!-- Membuat bentuk indikator menjadi bulat -->
-</shape>
