@@ -1,122 +1,122 @@
+import 'package:makanku/data/source/local/database_service.dart';
+import 'package:makanku/data/source/networks/api.dart';
+import 'package:makanku/features/settings/presentation/providers/settings_provider.dart';
+import 'package:makanku/features/settings/presentation/providers/theme_provider.dart';
+import 'package:makanku/core/styles/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:makanku/features/restaurant/presentation/screens/home_screen.dart';
+import 'package:makanku/core/constants/navigation_routes.dart';
+import 'package:makanku/core/services/local_notification_service.dart';
+import 'package:makanku/features/restaurant/data/repositories/restaurant_repository_impl.dart';
+import 'package:makanku/features/restaurant/domain/usecases/restaurant_use_case.dart';
+import 'package:makanku/features/restaurant/presentation/screens/detail_screen.dart';
+import 'package:makanku/features/favorite/presentation/screens/favorite_screen.dart';
+import 'package:makanku/features/search/presentation/screens/search_screen.dart';
+import 'package:makanku/features/settings/presentation/screens/settings_screen.dart';
+import 'package:makanku/features/restaurant/presentation/providers/restaurant_detail_provider.dart';
+import 'package:makanku/features/favorite/presentation/providers/favorite_provider.dart';
+import 'package:makanku/features/settings/presentation/providers/notification_provider.dart';
+import 'package:makanku/features/restaurant/presentation/providers/restaurant_list_provider.dart';
+import 'package:makanku/features/restaurant/presentation/providers/restaurant_search_provider.dart';
 
 void main() {
-  runApp(const MyApp());
-}
+  runApp(
+    MultiProvider(
+      providers: [
+        // Services
+        Provider<ApiImpl>(create: (_) => ApiImpl()),
+        Provider<DatabaseService>(create: (_) => DatabaseService()),
+        Provider<LocalNotificationService>(create: (_) => LocalNotificationService()), // Tambahkan ini jika belum ada
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        // Repository
+        ProxyProvider2<ApiImpl, DatabaseService, RestaurantImpl>(
+          update: (context, api, db, previous) =>
+              RestaurantImpl(api: api, databaseService: db),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+        // Use Case
+        ProxyProvider<RestaurantImpl, RestaurantUseCase>(
+          update: (_, repo, __) =>
+              RestaurantUseCase(restaurantRepository: repo),
+        ),
+
+        // Providers
+        ChangeNotifierProvider<HomeProvider>(
+          create: (context) => HomeProvider(
+            restaurantUseCase: Provider.of<RestaurantUseCase>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<DetailProvider>(
+          create: (context) => DetailProvider(
+            restaurantUseCase: Provider.of<RestaurantUseCase>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<SearchProvider>(
+          create: (context) => SearchProvider(
+            restaurantUseCase: Provider.of<RestaurantUseCase>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<FavoriteProvider>(
+          create: (context) => FavoriteProvider(
+            restaurantUseCase: Provider.of<RestaurantUseCase>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<LocalNotificationProvider>(
+          create: (context) => LocalNotificationProvider(
+            Provider.of<LocalNotificationService>(context, listen: false),
+          )..requestPermissions(),
+        ),
+        ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
+
+        // Tambahkan SettingsProvider
+        ChangeNotifierProvider<SettingsProvider>(create: (_) => SettingsProvider()),
+      ],
+      child: const MainApp(),
+    ),
+  );
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Menggunakan Consumer untuk ThemeNotifier agar reactive terhadap perubahan theme
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: 'Makanku',
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeNotifier.themeMode, // Menggunakan dari Consumer
+          initialRoute: NavigationRoute.home.route,
+          routes: {
+            NavigationRoute.home.route: (context) => const HomeScreen(),
+            NavigationRoute.detail.route: (context) => DetailScreen(
+              id: ModalRoute.of(context)?.settings.arguments as String,
+            ),
+            NavigationRoute.search.route: (context) => SearchScreen(
+              query: ModalRoute.of(context)?.settings.arguments as String,
+            ),
+            NavigationRoute.favorite.route: (context) => const FavoriteScreen(),
+            NavigationRoute.settings.route: (context) => const SettingsScreen(),
+          },
+        );
+      },
     );
   }
 }
