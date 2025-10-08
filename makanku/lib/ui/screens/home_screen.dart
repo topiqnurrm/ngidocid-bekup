@@ -16,11 +16,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final prov = Provider.of<RestaurantProvider>(context, listen: false);
+  //   prov.loadRestaurants();
+  // }
   @override
   void initState() {
     super.initState();
-    final prov = Provider.of<RestaurantProvider>(context, listen: false);
-    prov.loadRestaurants();
+    // Tunggu sampai frame pertama selesai build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<RestaurantProvider>(context, listen: false).loadRestaurants();
+    });
   }
 
   @override
