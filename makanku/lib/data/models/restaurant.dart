@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 class MenuItem {
   final String name;
@@ -14,14 +15,14 @@ class Menus {
   Menus({required this.foods, required this.drinks});
 
   factory Menus.fromJson(Map<String, dynamic> json) => Menus(
-        foods: (json['foods'] as List? ?? []).map((e) => MenuItem.fromJson(Map<String, dynamic>.from(e))).toList(),
-        drinks: (json['drinks'] as List? ?? []).map((e) => MenuItem.fromJson(Map<String, dynamic>.from(e))).toList(),
-      );
+    foods: (json['foods'] as List? ?? []).map((e) => MenuItem.fromJson(Map<String, dynamic>.from(e))).toList(),
+    drinks: (json['drinks'] as List? ?? []).map((e) => MenuItem.fromJson(Map<String, dynamic>.from(e))).toList(),
+  );
 
   Map<String, dynamic> toJson() => {
-        'foods': foods.map((e) => e.toJson()).toList(),
-        'drinks': drinks.map((e) => e.toJson()).toList(),
-      };
+    'foods': foods.map((e) => e.toJson()).toList(),
+    'drinks': drinks.map((e) => e.toJson()).toList(),
+  };
 }
 
 class Review {
@@ -32,16 +33,16 @@ class Review {
   Review({required this.name, required this.review, required this.date});
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
-        name: json['name'] ?? '',
-        review: json['review'] ?? '',
-        date: json['date'] ?? '',
-      );
+    name: json['name'] ?? '',
+    review: json['review'] ?? '',
+    date: json['date'] ?? '',
+  );
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'review': review,
-        'date': date,
-      };
+    'name': name,
+    'review': review,
+    'date': date,
+  };
 }
 
 class Restaurant {
@@ -83,14 +84,42 @@ class Restaurant {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'description': description,
-        'city': city,
-        'address': address,
-        'rating': rating,
-        'pictureId': pictureId,
-        'menus': menus.toJson(),
-        'customerReviews': customerReviews.map((e) => e.toJson()).toList(),
-      };
+    'id': id,
+    'name': name,
+    'description': description,
+    'city': city,
+    'address': address,
+    'rating': rating,
+    'pictureId': pictureId,
+    'menus': menus.toJson(),
+    'customerReviews': customerReviews.map((e) => e.toJson()).toList(),
+  };
+
+  // Method khusus untuk konversi ke database
+  Map<String, dynamic> toDatabase() => {
+    'id': id,
+    'name': name,
+    'description': description,
+    'city': city,
+    'address': address,
+    'rating': rating,
+    'pictureId': pictureId,
+    'menus': jsonEncode(menus.toJson()), // Convert to JSON string
+    'customerReviews': jsonEncode(customerReviews.map((e) => e.toJson()).toList()), // Convert to JSON string
+  };
+
+  // Factory method khusus untuk parsing dari database
+  factory Restaurant.fromDatabase(Map<String, dynamic> json) {
+    return Restaurant(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      city: json['city'] ?? '',
+      address: json['address'] ?? '',
+      rating: (json['rating'] is int) ? (json['rating'] as int).toDouble() : (json['rating'] is double ? json['rating'] : double.tryParse('${json['rating']}') ?? 0.0),
+      pictureId: json['pictureId'] ?? '',
+      menus: Menus.fromJson(jsonDecode(json['menus'] ?? '{}')), // Decode from JSON string
+      customerReviews: (jsonDecode(json['customerReviews'] ?? '[]') as List).map((e) => Review.fromJson(Map<String, dynamic>.from(e))).toList(), // Decode from JSON string
+    );
+  }
 }

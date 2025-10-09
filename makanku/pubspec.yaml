@@ -36,6 +36,11 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+  # ✅ Tambahan penting untuk unit test
+  mockito: ^5.5.0
+  build_runner: ^2.4.11
+  test: ^1.25.0
+
 flutter:
   uses-material-design: true
 
