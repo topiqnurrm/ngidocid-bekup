@@ -111,7 +111,7 @@ class DetailScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.wifi_off, size: 80, color: Colors.grey),
+                    Icon(Icons.wifi_off, size: 80, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     const SizedBox(height: 16),
                     Text(
                       'Oops!',
@@ -124,7 +124,7 @@ class DetailScreen extends StatelessWidget {
                     Text(
                       dn.error,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.black54),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
@@ -182,7 +182,7 @@ class DetailScreen extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Container(
                         height: 180,
-                        color: Colors.grey.shade300,
+                        color: Theme.of(context).dividerColor,
                         child: const Center(
                             child: Icon(Icons.broken_image, size: 50)),
                       ),

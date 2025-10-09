@@ -16,7 +16,6 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -26,7 +25,7 @@ class ErrorScreen extends StatelessWidget {
               Icon(
                 Icons.error_outline_rounded,
                 size: 100,
-                color: Colors.redAccent.shade200,
+                color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(height: 24),
               Text(

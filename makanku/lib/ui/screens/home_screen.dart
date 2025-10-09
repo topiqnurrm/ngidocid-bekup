@@ -28,7 +28,9 @@ class HomeScreen extends StatelessWidget {
         if (prov.state == LoadingState.busy) return const Center(child: CircularProgressIndicator());
         if (prov.state == LoadingState.error) return ErrorScreen(message: prov.message, onRetry: prov.loadRestaurants);
         if (prov.restaurants.isEmpty) return const Center(child: Text('No restaurants available'));
-        return ListView.separated(
+        return RefreshIndicator(
+          onRefresh: () => prov.loadRestaurants(),
+          child: ListView.separated(
           padding: const EdgeInsets.all(12),
           separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemCount: prov.restaurants.length,
@@ -39,7 +41,7 @@ class HomeScreen extends StatelessWidget {
               child: RestaurantCard(restaurant: r),
             );
           },
-        );
+        ));
       }),
     );
   }
