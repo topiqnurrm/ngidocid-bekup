@@ -172,7 +172,7 @@ class DetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (r.pictureId.isNotEmpty)
+                if ((r.pictureId ?? '').isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
@@ -237,7 +237,7 @@ class DetailScreen extends StatelessWidget {
                 Text('Menu - Foods',
                     style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                if (r.menus.foods.isEmpty)
+                if ((r.menus?.foods ?? []).isEmpty)
                   const Text('No food menu available')
                 else
                   Column(
@@ -252,7 +252,7 @@ class DetailScreen extends StatelessWidget {
                 Text('Menu - Drinks',
                     style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                if (r.menus.drinks.isEmpty)
+                if ((r.menus?.drinks ?? []).isEmpty)
                   const Text('No drinks menu available')
                 else
                   Column(
@@ -268,7 +268,7 @@ class DetailScreen extends StatelessWidget {
                 Text('Reviews',
                     style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                if (r.customerReviews.isEmpty)
+                if ((r.customerReviews ?? []).isEmpty)
                   const Text('No reviews yet')
                 else
                   Column(
@@ -314,11 +314,10 @@ class DetailScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       final ok = await dn.submitReview();
+                      if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(ok
-                              ? 'Review berhasil dikirim'
-                              : 'Gagal mengirim review'),
+                          content: Text(ok ? 'Review berhasil dikirim' : 'Gagal mengirim review'),
                         ),
                       );
                     },

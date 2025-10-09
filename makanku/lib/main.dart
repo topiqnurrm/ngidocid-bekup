@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'ui/screens/settings_screen.dart';
+import 'utils/notification_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'providers/restaurant_provider.dart';
@@ -10,6 +12,7 @@ import 'ui/screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationHelper.initialize();
   runApp(const MakankuApp());
 }
 
@@ -39,6 +42,9 @@ class MakankuApp extends StatelessWidget {
             theme: baseLight.copyWith(textTheme: GoogleFonts.poppinsTextTheme(baseLight.textTheme)),
             darkTheme: baseDark.copyWith(textTheme: GoogleFonts.poppinsTextTheme(baseDark.textTheme)),
             home: const HomeScreen(),
+            routes: {
+              '/settings': (ctx) => const SettingsScreen(),
+            },
           );
         },
       ),

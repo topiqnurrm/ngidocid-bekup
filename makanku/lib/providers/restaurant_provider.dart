@@ -5,7 +5,9 @@ import '../data/restaurant_repository.dart';
 enum LoadingState { idle, busy, error }
 
 class RestaurantProvider extends ChangeNotifier {
-  final RestaurantRepository _repo = RestaurantRepository();
+  final RestaurantRepository _repo;
+  RestaurantProvider({RestaurantRepository? repo}) : _repo = repo ?? RestaurantRepository();
+
 
   List<Restaurant> restaurants = [];
   LoadingState state = LoadingState.idle;
