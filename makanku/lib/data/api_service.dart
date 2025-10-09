@@ -1,16 +1,16 @@
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../data/models/restaurant.dart';
+import 'models/restaurant.dart';
 
 class ApiService {
-  // Base API compatible with Dicoding REST API used in the reference
   static const String _base = 'https://restaurant-api.dicoding.dev';
 
   Future<List<Restaurant>> fetchList() async {
     final res = await http.get(Uri.parse('$_base/list'));
     if (res.statusCode == 200) {
       final j = json.decode(res.body);
-      final items = (j['restaurants'] as List).map((e) => Restaurant.fromJson(e)).toList();
+      final items = (j['restaurants'] as List).map((e) => Restaurant.fromJson(Map<String, dynamic>.from(e))).toList();
       return items;
     }
     throw Exception('Failed to load list');
@@ -20,16 +20,16 @@ class ApiService {
     final res = await http.get(Uri.parse('$_base/detail/$id'));
     if (res.statusCode == 200) {
       final j = json.decode(res.body);
-      return Restaurant.fromJson(j['restaurant']);
+      return Restaurant.fromJson(Map<String, dynamic>.from(j['restaurant']));
     }
     throw Exception('Failed to load detail');
   }
 
-  Future<List<Restaurant>> search(String query) async {
-    final res = await http.get(Uri.parse('$_base/search?q=$query'));
+  Future<List<Restaurant>> search(String q) async {
+    final res = await http.get(Uri.parse('$_base/search?q=$q'));
     if (res.statusCode == 200) {
       final j = json.decode(res.body);
-      final items = (j['restaurants'] as List).map((e) => Restaurant.fromJson(e)).toList();
+      final items = (j['restaurants'] as List).map((e) => Restaurant.fromJson(Map<String, dynamic>.from(e))).toList();
       return items;
     }
     throw Exception('Search failed');

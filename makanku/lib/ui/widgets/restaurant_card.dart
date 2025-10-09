@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import '../../data/models/restaurant.dart';
 
@@ -15,7 +16,7 @@ class RestaurantCard extends StatelessWidget {
         child: Row(children: [
           if (restaurant.pictureId.isNotEmpty) ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network('https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}', width: 80, height: 80, fit: BoxFit.cover),
+            child: Image.network('https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}', width: 88, height: 64, fit: BoxFit.cover),
           ),
           const SizedBox(width: 12),
           Expanded(child: Column(

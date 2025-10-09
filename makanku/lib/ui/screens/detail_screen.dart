@@ -1,113 +1,335 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/restaurant_provider.dart';
-import '../../providers/favorite_provider.dart';
-import '../widgets/restaurant_card.dart';
 import '../../data/models/restaurant.dart';
+import '../../data/restaurant_repository.dart';
+import '../../providers/favorite_provider.dart';
 
-class DetailScreen extends StatefulWidget {
+/// ---------------------------
+/// DETAIL NOTIFIER
+/// ---------------------------
+class DetailNotifier extends ChangeNotifier {
+  final String id;
+  final RestaurantRepository _repo = RestaurantRepository();
+
+  Restaurant? restaurant;
+  bool loading = false;
+  bool submitting = false;
+  String error = '';
+
+  final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController reviewCtrl = TextEditingController();
+
+  DetailNotifier(this.id) {
+    load();
+  }
+
+  /// Memuat data detail restoran dengan penanganan error yang lebih jelas
+  Future<void> load() async {
+    loading = true;
+    error = '';
+    notifyListeners();
+
+    try {
+      restaurant = await _repo
+          .getDetail(id)
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw const SocketException('Timeout');
+      });
+    } on SocketException {
+      error = 'Tidak ada koneksi internet. Periksa jaringan Anda.';
+    } catch (e) {
+      error = 'Gagal memuat data. Silakan coba lagi nanti.';
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Mengirim ulasan
+  Future<bool> submitReview() async {
+    final name = nameCtrl.text.trim();
+    final review = reviewCtrl.text.trim();
+    if (name.isEmpty || review.isEmpty) return false;
+
+    submitting = true;
+    notifyListeners();
+
+    try {
+      final ok = await _repo.addReview(id, name, review);
+      if (ok) {
+        nameCtrl.clear();
+        reviewCtrl.clear();
+        await load();
+      }
+      return ok;
+    } catch (_) {
+      return false;
+    } finally {
+      submitting = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    nameCtrl.dispose();
+    reviewCtrl.dispose();
+    super.dispose();
+  }
+}
+
+/// ---------------------------
+/// DETAIL SCREEN
+/// ---------------------------
+class DetailScreen extends StatelessWidget {
   final String id;
   const DetailScreen({required this.id, super.key});
 
-  @override
-  State<DetailScreen> createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<DetailScreen> {
-  Restaurant? restaurant;
-  bool loading = true;
-  String error = '';
-  final _nameCtrl = TextEditingController();
-  final _reviewCtrl = TextEditingController();
-  bool submitting = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    setState(() { loading = true; });
-    try {
-      final rp = Provider.of<RestaurantProvider>(context, listen: false);
-      restaurant = await rp.getDetail(widget.id);
-    } catch (e) {
-      error = e.toString();
-    } finally {
-      setState(() { loading = false; });
-    }
-  }
-
-  Future<void> _submit() async {
-    if (_nameCtrl.text.trim().isEmpty || _reviewCtrl.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill name and review')));
-      return;
-    }
-    setState((){ submitting = true; });
-    final rp = Provider.of<RestaurantProvider>(context, listen: false);
-    final ok = await rp.submitReview(widget.id, _nameCtrl.text.trim(), _reviewCtrl.text.trim());
-    setState((){ submitting = false; });
-    if (ok) {
-      _nameCtrl.clear();
-      _reviewCtrl.clear();
-      await _load(); // refresh detail to get latest reviews
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Review submitted')));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to submit review')));
-    }
-  }
+  static const _imageBase = 'https://restaurant-api.dicoding.dev/images/large/';
 
   @override
   Widget build(BuildContext context) {
-    final fav = Provider.of<FavoriteProvider>(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Detail')),
-      body: loading ? const Center(child: CircularProgressIndicator()) : (error.isNotEmpty ? Center(child: Text('Error: $error')) :
-      SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(restaurant!.name, style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            Text('City: ${restaurant!.city} - Rating: ${restaurant!.rating}'),
-            const SizedBox(height: 12),
-            if (restaurant!.pictureId.isNotEmpty) Image.network('https://restaurant-api.dicoding.dev/images/medium/${restaurant!.pictureId}'),
-            const SizedBox(height: 12),
-            Text(restaurant!.description),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              icon: Icon(fav.isFavorite(restaurant!.id) ? Icons.favorite : Icons.favorite_border),
-              label: Text(fav.isFavorite(restaurant!.id) ? 'Unfavorite' : 'Add to Favorites'),
-              onPressed: () => fav.toggle(restaurant!),
+    return ChangeNotifierProvider(
+      create: (_) => DetailNotifier(id),
+      builder: (context, _) {
+        final dn = Provider.of<DetailNotifier>(context);
+
+        /// Loading state
+        if (dn.loading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        /// Error state — tampilkan tampilan user-friendly
+        if (dn.error.isNotEmpty) {
+          return Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.wifi_off, size: 80, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Oops!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      dn.error,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Provider.of<DetailNotifier>(context, listen: false)
+                            .load();
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Coba Lagi'),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            const Divider(),
-            Text('Reviews', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            if (restaurant!.customerReviews.isEmpty) const Text('No reviews yet') else Column(
-              children: restaurant!.customerReviews.map((r) => ListTile(
-                title: Text(r.name),
-                subtitle: Text(r.review),
-                trailing: Text(r.date, style: Theme.of(context).textTheme.bodySmall),
-              )).toList(),
+          );
+        }
+
+        /// Data kosong
+        if (dn.restaurant == null) {
+          return const Scaffold(
+            body: Center(child: Text('Data tidak ditemukan')),
+          );
+        }
+
+        /// Konten utama
+        final r = dn.restaurant!;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(r.name),
+            actions: [
+              Consumer<FavoriteProvider>(
+                builder: (context, fav, __) {
+                  final isFav = fav.isFavorite(r.id);
+                  return IconButton(
+                    icon: Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border),
+                    onPressed: () => fav.toggle(r),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (r.pictureId.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      '$_imageBase${r.pictureId}',
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        height: 180,
+                        color: Colors.grey.shade300,
+                        child: const Center(
+                            child: Icon(Icons.broken_image, size: 50)),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                Text(r.name, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 8),
+
+                /// Lokasi & alamat
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(r.city,
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.location_on, size: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            r.address,
+                            softWrap: true,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.star, size: 16, color: Colors.amber),
+                    const SizedBox(width: 4),
+                    Text('${r.rating}'),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+                Text('Description',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 6),
+                Text(r.description),
+                const SizedBox(height: 12),
+                const Divider(),
+
+                /// Menu - Foods
+                Text('Menu - Foods',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                if (r.menus.foods.isEmpty)
+                  const Text('No food menu available')
+                else
+                  Column(
+                    children: r.menus.foods
+                        .map((m) => ListTile(title: Text(m.name)))
+                        .toList(),
+                  ),
+
+                const SizedBox(height: 8),
+
+                /// Menu - Drinks
+                Text('Menu - Drinks',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                if (r.menus.drinks.isEmpty)
+                  const Text('No drinks menu available')
+                else
+                  Column(
+                    children: r.menus.drinks
+                        .map((m) => ListTile(title: Text(m.name)))
+                        .toList(),
+                  ),
+
+                const SizedBox(height: 12),
+                const Divider(),
+
+                /// Reviews
+                Text('Reviews',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                if (r.customerReviews.isEmpty)
+                  const Text('No reviews yet')
+                else
+                  Column(
+                    children: r.customerReviews
+                        .map(
+                          (rev) => ListTile(
+                        title: Text(rev.name),
+                        subtitle: Text(rev.review),
+                        trailing: Text(
+                          rev.date,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    )
+                        .toList(),
+                  ),
+
+                const SizedBox(height: 16),
+                const Divider(),
+
+                /// Add Review
+                Text('Add a review',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: dn.nameCtrl,
+                  decoration:
+                  const InputDecoration(labelText: 'Your name'),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: dn.reviewCtrl,
+                  decoration:
+                  const InputDecoration(labelText: 'Your review'),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 12),
+
+                dn.submitting
+                    ? const Center(child: CircularProgressIndicator())
+                    : SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final ok = await dn.submitReview();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(ok
+                              ? 'Review berhasil dikirim'
+                              : 'Gagal mengirim review'),
+                        ),
+                      );
+                    },
+                    child: const Text('Submit Review'),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            const Divider(),
-            Text('Add a review', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Your name')),
-            const SizedBox(height: 8),
-            TextField(controller: _reviewCtrl, decoration: const InputDecoration(labelText: 'Your review'), maxLines: 3),
-            const SizedBox(height: 12),
-            submitting ? const Center(child: CircularProgressIndicator()) : SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(onPressed: _submit, child: const Text('Submit Review')),
-            ),
-          ],
-        ),
-      )),
+          ),
+        );
+      },
     );
   }
 }

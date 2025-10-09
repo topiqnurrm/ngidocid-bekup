@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import '../data/models/restaurant.dart';
 import '../data/restaurant_repository.dart';
@@ -12,18 +13,25 @@ class RestaurantProvider extends ChangeNotifier {
 
   Future<void> loadRestaurants() async {
     state = LoadingState.busy;
+    message = '';
     notifyListeners();
     try {
       restaurants = await _repo.getRestaurants();
       state = LoadingState.idle;
     } catch (e) {
       state = LoadingState.error;
-      message = e.toString();
+      message = 'Failed to load restaurants. Please check your internet connection.';
     }
     notifyListeners();
   }
 
-  Future<Restaurant> getDetail(String id) => _repo.getDetail(id);
+  Future<Restaurant> getDetail(String id) async {
+    try {
+      return await _repo.getDetail(id);
+    } catch (e) {
+      throw Exception('Failed to load restaurant detail. Please try again.');
+    }
+  }
 
   Future<void> search(String q) async {
     state = LoadingState.busy;
@@ -33,7 +41,7 @@ class RestaurantProvider extends ChangeNotifier {
       state = LoadingState.idle;
     } catch (e) {
       state = LoadingState.error;
-      message = e.toString();
+      message = 'Search failed. Please try again.';
     }
     notifyListeners();
   }

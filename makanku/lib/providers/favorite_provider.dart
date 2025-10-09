@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/models/restaurant.dart';
@@ -16,8 +17,12 @@ class FavoriteProvider extends ChangeNotifier {
     final sp = await SharedPreferences.getInstance();
     final s = sp.getString(_key);
     if (s != null) {
-      final list = (json.decode(s) as List).cast<Map<String, dynamic>>();
-      _favs = list.map((e) => Restaurant.fromJson(e)).toList();
+      try {
+        final List decoded = json.decode(s);
+        _favs = decoded.map((e) => Restaurant.fromJson(Map<String, dynamic>.from(e))).toList();
+      } catch (_) {
+        _favs = [];
+      }
     }
     notifyListeners();
   }
