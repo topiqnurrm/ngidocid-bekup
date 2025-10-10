@@ -1,7 +1,10 @@
+import 'dart:io'; // ✅ Untuk cek platform
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart'; // ✅ Untuk cek versi Android
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -9,24 +12,28 @@ class NotificationService {
   NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
 
   static const String _prefKey = 'daily_reminder_enabled';
   static const int _notificationId = 0;
 
+  /// Fungsi untuk inisialisasi notifikasi
   Future<void> init() async {
-    // initialize timezone package
+    // Initialize timezone package
     tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings('@mipmap/ic_launcher');
 
     final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    InitializationSettings(android: initializationSettingsAndroid);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-    // If enabled by preference and not scheduled, schedule on init
+    // ✅ Minta izin notifikasi ketika inisialisasi pertama kali
+    await requestNotificationPermission();
+
+    // Cek preferensi pengguna (aktif/nonaktif)
     final prefs = await SharedPreferences.getInstance();
     final enabled = prefs.getBool(_prefKey) ?? true;
     if (enabled) {
@@ -52,7 +59,7 @@ class NotificationService {
   }
 
   Future<void> scheduleDailyLunchNotification({int hour = 11, int minute = 0}) async {
-    // Cancel existing first (to avoid duplicates)
+    // Batalkan notifikasi sebelumnya untuk menghindari duplikasi
     await cancelDailyNotification();
 
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
@@ -72,10 +79,6 @@ class NotificationService {
 
     const platformDetails = NotificationDetails(android: androidDetails);
 
-    // Note: recent versions of flutter_local_notifications require specifying
-    // `androidScheduleMode`. Choose `exactAllowWhileIdle` to try and show at the exact time
-    // even while idle. If you prefer not to request exact-alarm permissions you can use
-    // `inexact` or `inexactAllowWhileIdle` instead.
     await flutterLocalNotificationsPlugin.zonedSchedule(
       _notificationId,
       'Sudah jam makan siang! Yuk, istirahat dulu 🍱',
@@ -83,13 +86,27 @@ class NotificationService {
       scheduledDate,
       platformDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      // This makes it repeat daily at the same time.
-      matchDateTimeComponents: DateTimeComponents.time,
+      matchDateTimeComponents: DateTimeComponents.time, // ulangi setiap hari pada waktu yang sama
       payload: 'daily_lunch',
     );
   }
 
   Future<void> cancelDailyNotification() async {
     await flutterLocalNotificationsPlugin.cancel(_notificationId);
+  }
+}
+
+/// ✅ Fungsi di luar class untuk meminta izin notifikasi khusus Android 13+
+/// Bisa dipanggil di main.dart sebelum inisialisasi NotificationService
+Future<void> requestNotificationPermission() async {
+  if (Platform.isAndroid) {
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    final androidVersion = androidInfo.version.sdkInt;
+
+    if (androidVersion >= 33) { // Android 13+
+      if (await Permission.notification.isDenied) {
+        await Permission.notification.request();
+      }
+    }
   }
 }
