@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/notification_helper.dart';
+import '../notification_service.dart';
 
 class ReminderProvider extends ChangeNotifier {
   static const _reminderKey = 'daily_reminder_enabled';
@@ -15,13 +15,12 @@ class ReminderProvider extends ChangeNotifier {
   }
 
   Future<void> _init() async {
-    NotificationHelper.initialize();
-    await _loadPreference();
-  }
+    // ensure notification service initialized and permissions requested
+    await requestNotificationPermission();
+    await NotificationService().init();
 
-  Future<void> _loadPreference() async {
     final sp = await SharedPreferences.getInstance();
-    _reminderEnabled = sp.getBool(_reminderKey) ?? false;
+    _reminderEnabled = sp.getBool(_reminderKey) ?? true;
     _isLoading = false;
     notifyListeners();
   }
@@ -33,34 +32,22 @@ class ReminderProvider extends ChangeNotifier {
     notifyListeners();
 
     if (value) {
-      await NotificationHelper.scheduleDailyNotification(
-        id: 0,
-        hour: 11,
-        minute: 0,
-        title: 'Lunch time',
-        body: "Don't forget to have your lunch!",
-      );
-
+      await NotificationService().scheduleDailyLunchNotification(hour: 11, minute: 0);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ Alarm aktif! Pengingat akan muncul setiap hari jam 11:00 AM'),
-            duration: Duration(seconds: 3),
-            backgroundColor: Colors.green,
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('✅ Alarm aktif! Pengingat akan muncul setiap hari jam 11:00 AM'),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green,
+        ));
       }
     } else {
-      await NotificationHelper.cancel(0);
-
+      await NotificationService().cancelDailyNotification();
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('❌ Alarm dinonaktifkan'),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.orange,
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('❌ Alarm dinonaktifkan'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.orange,
+        ));
       }
     }
   }

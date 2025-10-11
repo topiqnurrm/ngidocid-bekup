@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/reminder_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'providers/reminder_provider.dart';
 
 import 'providers/restaurant_provider.dart';
 import 'providers/favorite_provider.dart';

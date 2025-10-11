@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
@@ -14,34 +12,10 @@ class NotificationHelper {
     const settings = InitializationSettings(android: android, iOS: ios);
     await _plugin.initialize(settings);
     tzdata.initializeTimeZones();
-
-    // Request runtime notification permission on Android 13+ (POST_NOTIFICATIONS)
-    if (Platform.isAndroid) {
-      await requestNotificationPermission();
-    }
   }
 
-  /// Request permissions (POST_NOTIFICATIONS for Android 13+, and schedule exact alarm)
-  static Future<void> requestNotificationPermission() async {
-    try {
-      // POST_NOTIFICATIONS (Android 13+)
-      if (await Permission.notification.isDenied) {
-        await Permission.notification.request();
-      }
-
-      // SCHEDULE_EXACT_ALARM (requires special handling starting Android 12+)
-      // permission_handler exposes scheduleExactAlarm on supported platforms
-      if (Platform.isAndroid) {
-        if (await Permission.scheduleExactAlarm.isDenied) {
-          await Permission.scheduleExactAlarm.request();
-        }
-      }
-    } catch (_) {
-      // ignore any permission handler exceptions; best-effort
-    }
-  }
-
-static Future<void> scheduleDailyNotification({
+  /// Jadwalkan notifikasi harian (misalnya jam 11:00)
+  static Future<void> scheduleDailyNotification({
     required int id,
     required int hour,
     required int minute,

@@ -1,6 +1,7 @@
 import 'dart:io'; // ✅ Untuk cek platform
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,6 +22,16 @@ class NotificationService {
   Future<void> init() async {
     // Initialize timezone package
     tz.initializeTimeZones();
+    // Set local timezone based on device timezone (important for Android scheduling)
+    try {
+      final String? timeZoneName = await FlutterTimezone.getLocalTimezone();
+      if (timeZoneName != null && timeZoneName.isNotEmpty) {
+        tz.setLocalLocation(tz.getLocation(timeZoneName));
+      }
+    } catch (e) {
+      // ignore and fallback to default tz.local
+    }
+
 
     const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -103,9 +114,21 @@ Future<void> requestNotificationPermission() async {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
     final androidVersion = androidInfo.version.sdkInt;
 
+    // ✅ Izin notifikasi untuk Android 13+
     if (androidVersion >= 33) { // Android 13+
       if (await Permission.notification.isDenied) {
         await Permission.notification.request();
+      }
+    }
+
+    // ✅ Izin exact alarm scheduling untuk Android 12+
+    if (androidVersion >= 31) { // Android 12+
+      try {
+        if (await Permission.scheduleExactAlarm.isDenied) {
+          await Permission.scheduleExactAlarm.request();
+        }
+      } catch (_) {
+        // permission_handler mungkin tidak support di beberapa platform
       }
     }
   }
