@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438161235133",
+    "project_id": "mascan-1dc42",
+    "storage_bucket": "mascan-1dc42.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438161235133:android:982b3900fa84aa9890ebd4",
+        "android_client_info": {
+          "package_name": "com.example.mascan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCXHNmyQVv37aNVf28c4RPOseCsp9_cIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
