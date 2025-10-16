@@ -53,3 +53,4 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/banners/
+    - assets/model/food_model.tflite
