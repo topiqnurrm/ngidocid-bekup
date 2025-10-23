@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/utils/show_dialog.dart';
-import 'package:mascan/core/widgets/app_scaffold.dart';
-import 'package:mascan/views/home/widgets/method_card.dart';
+import 'package:mascan/core/utils.dart';
+import 'package:mascan/core/widgets.dart';
+import 'package:mascan/views/home/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';

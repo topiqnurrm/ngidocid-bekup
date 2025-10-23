@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/utils/toast.dart';
-import 'package:mascan/core/widgets/app_scaffold.dart';
-import 'package:mascan/core/widgets/primary_outlined_button.dart';
-import 'package:mascan/core/widgets/primary_button.dart';
+import 'package:mascan/core/utils.dart';
+import 'package:mascan/core/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_cropper/image_cropper.dart';

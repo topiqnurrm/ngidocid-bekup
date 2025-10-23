@@ -1,12 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/theme/theme_extensions.dart';
-import 'package:mascan/core/utils/toast.dart';
-import 'package:mascan/core/widgets/app_scaffold.dart';
+import 'package:mascan/core/theme.dart';
+import 'package:mascan/core/utils.dart';
+import 'package:mascan/core/widgets.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../core/utils/permission_handler.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({super.key});

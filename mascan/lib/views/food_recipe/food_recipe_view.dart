@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mascan/core/views/error_view.dart';
-import 'package:mascan/core/views/loading_view.dart';
-import 'package:mascan/core/views/no_result_view.dart';
-import 'package:mascan/core/widgets/app_scaffold.dart';
-import 'package:mascan/models/food_recipe_model.dart';
-import 'package:mascan/viewmodels/providers.dart';
-import 'package:mascan/views/food_recipe/widgets/ingredient_list.dart';
-import 'package:mascan/views/food_recipe/widgets/nutrition_facts.dart';
+import 'package:mascan/core/views.dart';
+import 'package:mascan/core/widgets.dart';
+import 'package:mascan/models.dart';
+import 'package:mascan/viewmodels/modelsview.dart';
+import 'package:mascan/views/food_recipe/widgets.dart';
 import 'package:gap/gap.dart';
 
 class FoodRecipeView extends ConsumerStatefulWidget {

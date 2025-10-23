@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+
+extension ThemeExtension on BuildContext {
+  bool get isIOS => Theme.of(this).platform == TargetPlatform.iOS;
+  bool get isAndroid => Theme.of(this).platform == TargetPlatform.android;
+}
 
 class AppTheme {
   static ThemeData defaultTheme({required bool isIOS}) {

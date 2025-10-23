@@ -1,10 +1,132 @@
+import 'package:json_annotation/json_annotation.dart';
 
+class FoodPrediction {
+  final String label;
+  final double confidence;
+  FoodPrediction({required this.label, required this.confidence});
+  String get confidencePercentage =>
+      '${(confidence * 100).toStringAsFixed(1)}%';
+  Map<String, dynamic> toJson() => {'label': label, 'confidence': confidence};
+  factory FoodPrediction.fromJson(Map<String, dynamic> json) => FoodPrediction(
+    label: json['label'],
+    confidence: json['confidence'].toDouble(),
+  );
+}
 
-part of 'food_recipe_model.dart';
-
-
-
-
+@JsonSerializable()
+class FoodRecipe {
+  final String idMeal;
+  final String strMeal;
+  final String? strMealAlternate;
+  final String strCategory;
+  final String strArea;
+  final String strInstructions;
+  final String strMealThumb;
+  final String? strTags;
+  final String? strYoutube;
+  final String? strIngredient1;
+  final String? strIngredient2;
+  final String? strIngredient3;
+  final String? strIngredient4;
+  final String? strIngredient5;
+  final String? strIngredient6;
+  final String? strIngredient7;
+  final String? strIngredient8;
+  final String? strIngredient9;
+  final String? strIngredient10;
+  final String? strIngredient11;
+  final String? strIngredient12;
+  final String? strIngredient13;
+  final String? strIngredient14;
+  final String? strIngredient15;
+  final String? strIngredient16;
+  final String? strIngredient17;
+  final String? strIngredient18;
+  final String? strIngredient19;
+  final String? strIngredient20;
+  final String? strMeasure1;
+  final String? strMeasure2;
+  final String? strMeasure3;
+  final String? strMeasure4;
+  final String? strMeasure5;
+  final String? strMeasure6;
+  final String? strMeasure7;
+  final String? strMeasure8;
+  final String? strMeasure9;
+  final String? strMeasure10;
+  final String? strMeasure11;
+  final String? strMeasure12;
+  final String? strMeasure13;
+  final String? strMeasure14;
+  final String? strMeasure15;
+  final String? strMeasure16;
+  final String? strMeasure17;
+  final String? strMeasure18;
+  final String? strMeasure19;
+  final String? strMeasure20;
+  final String? strSource;
+  final String? strImageSource;
+  final String? strCreativeCommonsConfirmed;
+  final String? dateModified;
+  FoodRecipe({
+    required this.idMeal,
+    required this.strMeal,
+    this.strMealAlternate,
+    required this.strCategory,
+    required this.strArea,
+    required this.strInstructions,
+    required this.strMealThumb,
+    this.strTags,
+    this.strYoutube,
+    this.strIngredient1,
+    this.strIngredient2,
+    this.strIngredient3,
+    this.strIngredient4,
+    this.strIngredient5,
+    this.strIngredient6,
+    this.strIngredient7,
+    this.strIngredient8,
+    this.strIngredient9,
+    this.strIngredient10,
+    this.strIngredient11,
+    this.strIngredient12,
+    this.strIngredient13,
+    this.strIngredient14,
+    this.strIngredient15,
+    this.strIngredient16,
+    this.strIngredient17,
+    this.strIngredient18,
+    this.strIngredient19,
+    this.strIngredient20,
+    this.strMeasure1,
+    this.strMeasure2,
+    this.strMeasure3,
+    this.strMeasure4,
+    this.strMeasure5,
+    this.strMeasure6,
+    this.strMeasure7,
+    this.strMeasure8,
+    this.strMeasure9,
+    this.strMeasure10,
+    this.strMeasure11,
+    this.strMeasure12,
+    this.strMeasure13,
+    this.strMeasure14,
+    this.strMeasure15,
+    this.strMeasure16,
+    this.strMeasure17,
+    this.strMeasure18,
+    this.strMeasure19,
+    this.strMeasure20,
+    this.strSource,
+    this.strImageSource,
+    this.strCreativeCommonsConfirmed,
+    this.dateModified,
+  });
+  factory FoodRecipe.fromJson(Map<String, dynamic> json) =>
+      _$FoodRecipeFromJson(json);
+  Map<String, dynamic> toJson() => _$FoodRecipeToJson(this);
+}
 
 FoodRecipe _$FoodRecipeFromJson(Map<String, dynamic> json) => FoodRecipe(
   idMeal: json['idMeal'] as String,
@@ -61,7 +183,6 @@ FoodRecipe _$FoodRecipeFromJson(Map<String, dynamic> json) => FoodRecipe(
   strCreativeCommonsConfirmed: json['strCreativeCommonsConfirmed'] as String?,
   dateModified: json['dateModified'] as String?,
 );
-
 Map<String, dynamic> _$FoodRecipeToJson(FoodRecipe instance) =>
     <String, dynamic>{
       'idMeal': instance.idMeal,
@@ -118,3 +239,37 @@ Map<String, dynamic> _$FoodRecipeToJson(FoodRecipe instance) =>
       'strCreativeCommonsConfirmed': instance.strCreativeCommonsConfirmed,
       'dateModified': instance.dateModified,
     };
+
+@JsonSerializable()
+class Nutrition {
+  final int calories;
+  final int protein;
+  final int fat;
+  final int carbs;
+  final int fiber;
+  Nutrition({
+    required this.calories,
+    required this.protein,
+    required this.fat,
+    required this.carbs,
+    required this.fiber,
+  });
+  factory Nutrition.fromJson(Map<String, dynamic> json) =>
+      _$NutritionFromJson(json);
+  Map<String, dynamic> toJson() => _$NutritionToJson(this);
+}
+
+Nutrition _$NutritionFromJson(Map<String, dynamic> json) => Nutrition(
+  calories: (json['calories'] as num).toInt(),
+  protein: (json['protein'] as num).toInt(),
+  fat: (json['fat'] as num).toInt(),
+  carbs: (json['carbs'] as num).toInt(),
+  fiber: (json['fiber'] as num).toInt(),
+);
+Map<String, dynamic> _$NutritionToJson(Nutrition instance) => <String, dynamic>{
+  'calories': instance.calories,
+  'protein': instance.protein,
+  'fat': instance.fat,
+  'carbs': instance.carbs,
+  'fiber': instance.fiber,
+};

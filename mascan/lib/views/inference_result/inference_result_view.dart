@@ -2,15 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mascan/core/views/error_view.dart';
-import 'package:mascan/core/views/loading_view.dart';
-import 'package:mascan/core/views/no_result_view.dart';
-import 'package:mascan/core/widgets/app_scaffold.dart';
-import 'package:mascan/models/food_prediction_model.dart';
-import 'package:mascan/viewmodels/providers.dart';
-import 'package:mascan/viewmodels/states/lite_rt_view_model_state.dart';
-import 'package:mascan/views/inference_result/widgets/best_inference_result_card.dart';
-import 'package:mascan/views/inference_result/widgets/inference_result_item.dart';
+import 'package:mascan/core/views.dart';
+import 'package:mascan/core/widgets.dart';
+import 'package:mascan/models.dart';
+import 'package:mascan/viewmodels/modelsview.dart';
+import 'package:mascan/viewmodels/states.dart';
+import 'package:mascan/views/inference_result/widgets.dart';
 import 'package:gap/gap.dart';
 
 class InferenceResultView extends ConsumerStatefulWidget {

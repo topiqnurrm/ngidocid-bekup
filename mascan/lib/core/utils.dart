@@ -1,6 +1,34 @@
+import 'package:app_settings/app_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/theme/theme_extensions.dart';
+import 'package:mascan/core/theme.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
+
+class PermissionHandler {
+  static Future<bool> requestStoragePermission() async {
+    final status = await Permission.storage.request();
+    return status.isGranted;
+  }
+  static Future<bool> checkCameraPermission() async {
+    return await Permission.camera.isGranted;
+  }
+  static Future<void> openAppSettings() async {
+    await AppSettings.openAppSettings();
+  }
+  static Future<bool> handlePermissionDenied(Permission permission) async {
+    final isPermanentlyDenied =
+        await permission.isPermanentlyDenied || await permission.isDenied;
+    if (isPermanentlyDenied) {
+      await openAppSettings();
+      return false;
+    }
+    final status = await permission.request();
+    return status.isGranted;
+  }
+}
 
 Future<T?> showPlatformDialog<T>({
   required BuildContext context,
@@ -41,7 +69,6 @@ Future<T?> showPlatformDialog<T>({
       ),
     );
   }
-
   return showDialog<T>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -69,7 +96,6 @@ Future<T?> showPlatformDialog<T>({
     ),
   );
 }
-
 Future<bool?> showConfirmDialog({
   required BuildContext context,
   required String title,
@@ -87,7 +113,6 @@ Future<bool?> showConfirmDialog({
     onCancel: () => Navigator.of(context).pop(false),
   );
 }
-
 Future<void> showInfoDialog({
   required BuildContext context,
   required String title,
@@ -101,7 +126,6 @@ Future<void> showInfoDialog({
     confirmText: buttonText,
   );
 }
-
 Future<void> showErrorDialog({
   required BuildContext context,
   String title = 'Kesalahan',
@@ -115,3 +139,42 @@ Future<void> showErrorDialog({
     confirmText: buttonText,
   );
 }
+
+void showToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 5,
+    textColor: Colors.black,
+    backgroundColor: Colors.orange.shade50,
+    fontSize: 14.0,
+  );
+}
+
+class Validator {
+  static bool isValidImageFile(String filePath) {
+    final validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+    return validExtensions.any((ext) => filePath.toLowerCase().endsWith(ext));
+  }
+  static bool isValidQuery(String query) {
+    return query.trim().isNotEmpty && query.trim().length >= 2;
+  }
+  static String? validateSearchQuery(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter a food name';
+    }
+    if (value.trim().length < 2) {
+      return 'Search query must be at least 2 characters';
+    }
+    return null;
+  }
+}
+
+
+
+
+
+
+
+
