@@ -54,7 +54,7 @@ class _CropImageViewState extends State<CropImageView> {
           IOSUiSettings(
             title: 'Crop Image',
             doneButtonTitle: 'Done',
-            cancelButtonTitle: 'Cancel',
+            cancelButtonTitle: 'Batal',
             minimumAspectRatio: 1.0,
             aspectRatioLockEnabled: false,
             resetAspectRatioEnabled: true,
@@ -71,7 +71,7 @@ class _CropImageViewState extends State<CropImageView> {
         });
       }
     } catch (e) {
-      showToast('Error cropping image: $e');
+      showToast('Gagal memotong gambar: $e');
     }
   }
 
@@ -80,13 +80,13 @@ class _CropImageViewState extends State<CropImageView> {
       _croppedImageFile = imageFile;
     });
 
-    showToast('Image reset to original.');
+    showToast('Gambar direset ke versi asli.');
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: Text('Crop Image'),
+      title: Text('Potong Gambar'),
       body: SafeArea(
         child: Column(
           children: [
@@ -109,7 +109,7 @@ class _CropImageViewState extends State<CropImageView> {
                                   color: Colors.red,
                                 ),
                                 Text(
-                                  'Failed to load image',
+                                  'Gagal memuat gambar',
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: 16,
@@ -122,7 +122,7 @@ class _CropImageViewState extends State<CropImageView> {
                       ),
                     ),
                   )
-                : Center(child: Text('No image selected')),
+                : Center(child: Text('Belum ada gambar yang dipilih')),
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -133,14 +133,14 @@ class _CropImageViewState extends State<CropImageView> {
                     children: [
                       Expanded(
                         child: PrimaryOutlinedButton(
-                          label: 'Crop',
+                          label: 'Potong',
                           icon: Icons.crop,
                           onPressed: _cropImage,
                         ),
                       ),
                       Expanded(
                         child: PrimaryOutlinedButton(
-                          label: 'Reset',
+                          label: 'Kembalikan',
                           icon: Icons.refresh,
                           onPressed: _resetToOriginal,
                         ),
@@ -149,7 +149,7 @@ class _CropImageViewState extends State<CropImageView> {
                   ),
                   Gap(4),
                   PrimaryButton(
-                    label: 'Analyze Image',
+                    label: 'Analisis Gambar',
                     icon: HeroIcons.document_magnifying_glass,
                     onPressed: () {
                       if (_croppedImageFile != null) {
@@ -158,7 +158,7 @@ class _CropImageViewState extends State<CropImageView> {
                           arguments: {'imagePath': _croppedImageFile!.path},
                         );
                       } else {
-                        showToast('Please crop the image first.');
+                        showToast('Mohon pangkas gambar terlebih dahulu.');
                       }
                     },
                   ),

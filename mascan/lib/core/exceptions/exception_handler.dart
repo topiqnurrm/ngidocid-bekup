@@ -10,32 +10,32 @@ class ExceptionHandler {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         return const TimeoutException(
-          'Request timed out. Please try again.',
-          'TIMEOUT',
+          'Permintaan habis waktu. Silakan coba lagi.',
+          'waktu tunggu berakhir',
         );
 
       case DioExceptionType.badResponse:
         return ServerException(
-          'Server error (${e.response?.statusCode}): ${e.response?.statusMessage}',
-          'SERVER_ERROR_${e.response?.statusCode}',
+          'Error pada server (${e.response?.statusCode}): ${e.response?.statusMessage}',
+          'Error pada server ${e.response?.statusCode}',
         );
 
       case DioExceptionType.unknown:
         if (e.error is SocketException) {
           return const NoInternetException(
-            'No internet connection. Please check your network.',
-            'NO_INTERNET',
+            'Tidak ada koneksi internet. Silakan periksa jaringan Anda.',
+            'TIDAK ADA INTERNET',
           );
         }
         return UnknownException(
-          'Unknown error occurred: ${e.message}',
-          'UNKNOWN',
+          'Terjadi kesalahan yang tidak diketahui: ${e.message}',
+          'Tidak diketahui',
         );
 
       default:
         return UnknownException(
-          'Failed to process request: ${e.message}',
-          'UNKNOWN',
+          'Permintaan gagal diproses: ${e.message}',
+          'Tidak diketahui',
         );
     }
   }
@@ -45,6 +45,6 @@ class ExceptionHandler {
       return e;
     }
 
-    return UnknownException('An unexpected error occurred: $e', 'GENERIC');
+    return UnknownException('Terjadi kesalahan yang tidak terduga: $e', 'Umum');
   }
 }

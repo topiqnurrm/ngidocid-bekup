@@ -7,7 +7,7 @@ class FirebaseMlService {
   File? _cachedModel;
 
   Future<File> loadModel() async {
-    // Return cached model if already loaded
+    
     if (_cachedModel != null) {
       return _cachedModel!;
     }

@@ -53,7 +53,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
               Navigator.pop(context);
             }
           });
-          showToast('Camera permission denied or not available.');
+          showToast('Izin kamera ditolak atau kamera tidak tersedia.');
         });
   }
 
@@ -77,7 +77,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
         );
       }
     } catch (e) {
-      showToast('Error capturing image: $e');
+      showToast('Gagal mengambil gambar: $e');
     } finally {
       controller?.resumePreview();
     }
@@ -141,7 +141,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                      "Capture Food Image",
+                      "Ambil gambar makanan",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -155,7 +155,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                      "Tap to capture. Make sure the food\nis in focus and well lit.",
+                      "Ketuk untuk memotret. Pastikan makanan \ntampak jelas dan cukup terang.",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
@@ -165,7 +165,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                   alignment: Alignment(0.9, 0.9),
                   child: FloatingActionButton(
                     onPressed: () => _onCameraSwitch(),
-                    heroTag: 'switch-camera',
+                    heroTag: 'Beralih kamera',
                     child: Icon(Icons.cameraswitch),
                   ),
                 ),
@@ -173,7 +173,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                   alignment: Alignment(0, 0.9),
                   child: FloatingActionButton(
                     onPressed: () => _onCaptureImage(),
-                    heroTag: 'capture',
+                    heroTag: 'Mengambil foto',
                     child: Icon(IonIcons.camera),
                   ),
                 ),
@@ -190,7 +190,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   Text(
-                    'Searching for camera...',
+                    'Membuka kamera ...',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),

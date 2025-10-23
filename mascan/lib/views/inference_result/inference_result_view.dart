@@ -58,16 +58,16 @@ class _InferenceResultViewState extends ConsumerState<InferenceResultView> {
     Widget body;
 
     if (liteRtState.isLoading) {
-      body = LoadingView(message: 'Analyzing image...');
+      body = LoadingView(message: 'Proses analisis gambar...');
     } else if (liteRtState.error != null) {
       body = ErrorView(error: liteRtState.error!, onRetry: _runImageInference);
     } else if (liteRtState.foods != null) {
       body = _buildContent(context, liteRtState);
     } else {
-      body = LoadingView(message: 'Loading model...');
+      body = LoadingView(message: 'Memuat model...');
     }
 
-    return AppScaffold(title: Text('Inference Result'), body: body);
+    return AppScaffold(title: Text('Hasil Inferensi'), body: body);
   }
 
   Widget _buildContent(BuildContext context, LiteRtViewModelState state) {
@@ -111,7 +111,7 @@ class _InferenceResultViewState extends ConsumerState<InferenceResultView> {
                     children: [
                       Center(
                         child: Text(
-                          'Analysis Results',
+                          'Hasil Analisis',
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
@@ -128,7 +128,7 @@ class _InferenceResultViewState extends ConsumerState<InferenceResultView> {
                       else
                         NoResultView(
                           description:
-                              'We couldn\'t identify this image as a food. Please try another image.',
+                              'Kami tidak dapat mengenali gambar ini sebagai makanan. Silakan coba gambar lain.',
                         ),
                     ],
                   ),
@@ -150,7 +150,7 @@ class _InferenceResultViewState extends ConsumerState<InferenceResultView> {
       spacing: 16,
       children: [
         BestInferenceResultCard(food: foods.first),
-        Text('Top 3 Results', style: Theme.of(context).textTheme.titleMedium),
+        Text('3 Hasil Teratas', style: Theme.of(context).textTheme.titleMedium),
         ...foods.map(
           (food) => InferenceResultItem(
             prediction: food,
@@ -167,7 +167,7 @@ class _InferenceResultViewState extends ConsumerState<InferenceResultView> {
         if (foods.length < 3)
           Center(
             child: Text(
-              'No more results available.',
+              'Tidak ada hasil lainnya yang tersedia.',
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),

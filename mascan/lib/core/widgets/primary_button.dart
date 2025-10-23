@@ -29,31 +29,31 @@ class PrimaryButton extends StatelessWidget {
             if (icon != null)
               Icon(
                 icon,
-                color: Theme.of(context).colorScheme.onPrimary, // atur warna ikon di sini
+                color: Theme.of(context).colorScheme.onPrimary, 
               ),
             Text(
               label,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary), // warna teks
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary), 
             ),
           ],
         ),
       );
 
-      // return CupertinoButton(
-      //   onPressed: onPressed,
-      //   foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      //   color: Theme.of(context).colorScheme.primary,
-      //   padding: EdgeInsets.symmetric(vertical: 12),
-      //   borderRadius: BorderRadius.circular(8),
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     spacing: 4,
-      //     children: [
-      //       Icon(HeroIcons.document_magnifying_glass),
-      //       Text('Analyze Image'),
-      //     ],
-      //   ),
-      // );
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
     } else {
       return MaterialButton(
         color: Theme.of(context).colorScheme.primary,

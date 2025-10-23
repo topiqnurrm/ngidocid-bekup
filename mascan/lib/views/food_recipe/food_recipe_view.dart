@@ -67,10 +67,10 @@ class _FoodRecipeViewState extends ConsumerState<FoodRecipeView> {
     } else if (foodState.foodRecipe != null) {
       body = _buildContent(foodRecipe: foodState.foodRecipe!);
     } else {
-      body = NoResultView(description: 'No recipe found for this food.');
+      body = NoResultView(description: 'Tidak ditemukan resep untuk makanan ini.');
     }
 
-    return AppScaffold(title: Text('Food Recipe'), body: body);
+    return AppScaffold(title: Text('Makanan Resep'), body: body);
   }
 
   Widget _buildContent({required FoodRecipe foodRecipe}) {
@@ -141,7 +141,7 @@ class _FoodRecipeViewState extends ConsumerState<FoodRecipeView> {
           NutritionFacts(foodLabel: foodRecipe.strMeal),
 
           Text(
-            'Ingredients',
+            'Bahan-bahan',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,
@@ -151,7 +151,7 @@ class _FoodRecipeViewState extends ConsumerState<FoodRecipeView> {
           IngredientsList(recipe: foodRecipe),
 
           Text(
-            'Instructions',
+            'Panduan',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,

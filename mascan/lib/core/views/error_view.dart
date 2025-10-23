@@ -16,7 +16,7 @@ class ErrorView extends StatelessWidget {
           children: [
             Icon(Icons.error, color: Colors.red, size: 64),
             Gap(16),
-            Text('Error', style: Theme.of(context).textTheme.headlineSmall),
+            Text('Kesalahan', style: Theme.of(context).textTheme.headlineSmall),
             Gap(8),
             Text(
               error,
@@ -27,7 +27,7 @@ class ErrorView extends StatelessWidget {
             OutlinedButton.icon(
               icon: Icon(Icons.refresh),
               onPressed: onRetry,
-              label: Text('Retry'),
+              label: Text('Coba Lagi'),
             ),
           ],
         ),

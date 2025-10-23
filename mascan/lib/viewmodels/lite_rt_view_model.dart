@@ -27,7 +27,7 @@ class LiteRtViewModel extends StateNotifier<LiteRtViewModelState> {
       final errorMsg = "Failed to initialize model: ${e.toString()}";
       state = state.copyWith(error: errorMsg, isLoading: false);
 
-      Logger().e("Error initializing model: $errorMsg");
+      Logger().e("Kesalahan initializing model: $errorMsg");
     }
   }
 
@@ -64,7 +64,7 @@ class LiteRtViewModel extends StateNotifier<LiteRtViewModelState> {
       final errorMsg = e.toString();
       state = state.copyWith(error: errorMsg, isLoading: false);
 
-      Logger().e("Error during inference: $errorMsg");
+      Logger().e("Kesalahan during inference: $errorMsg");
     }
   }
 }

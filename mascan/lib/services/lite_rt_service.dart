@@ -36,14 +36,14 @@ class LiteRtService {
       throw Exception('Model not initialized');
     }
 
-    // Run inference in isolate
+    
     final predictions = await IsolateInferenceService.runInference(
       imagePath: imagePath,
       modelPath: modelFile!.path,
       labels: labels!,
     );
 
-    // Filter low confidence predictions
+    
     final filteredPredictions = predictions
         .where((p) => p.confidence >= 0.15)
         .toList();

@@ -23,7 +23,7 @@ class FoodViewModel extends StateNotifier<FoodViewModelState> {
         isLoading: false,
         foodRecipe: null,
       );
-      Logger().e("Error fetching meal data: $e");
+      Logger().e("Kesalahan fetching meal data: $e");
     }
   }
 }

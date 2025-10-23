@@ -1,10 +1,10 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+
 
 part of 'food_recipe_model.dart';
 
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
+
+
+
 
 FoodRecipe _$FoodRecipeFromJson(Map<String, dynamic> json) => FoodRecipe(
   idMeal: json['idMeal'] as String,

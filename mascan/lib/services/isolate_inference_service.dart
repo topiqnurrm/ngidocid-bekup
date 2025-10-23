@@ -41,7 +41,7 @@ class IsolateInferenceService {
     final List<String> labels = params['labels'];
 
     try {
-      // Initialize interpreter in isolate
+      
       final options = InterpreterOptions()
         ..useNnApiForAndroid = true
         ..useMetalDelegateForIOS = true;
@@ -51,7 +51,7 @@ class IsolateInferenceService {
         options: options,
       );
 
-      // Process image
+      
       final imageFile = File(imagePath);
       final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes)!;
@@ -60,7 +60,7 @@ class IsolateInferenceService {
 
       final input = _imageToUint8Tensor(resizedImage);
 
-      // Get output shape and create output buffer
+      
       final outputFormat = interpreter.getOutputTensors();
       final outputShape = outputFormat[0].shape;
       final outputSize = outputShape.fold<int>(1, (acc, dim) => acc * dim);
@@ -75,7 +75,7 @@ class IsolateInferenceService {
       sendPort.send(predictions.map((p) => p.toJson()).toList());
     } catch (e) {
       sendPort.send('Inference error: ${e.toString()}');
-      Logger().e("Error when isolate inference: $e");
+      Logger().e("Kesalahan when isolate inference: $e");
     }
   }
 

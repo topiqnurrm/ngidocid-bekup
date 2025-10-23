@@ -37,7 +37,7 @@ class BestInferenceResultCard extends StatelessWidget {
                   Icon(Icons.star, color: Colors.amber.shade700, size: 24),
                   Gap(8),
                   Text(
-                    'Best Match',
+                    'Hasil Terbaik',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.blue.shade900,
                     ),
@@ -55,7 +55,7 @@ class BestInferenceResultCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Confidence: ',
+                    'Kecocokan: ',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
                   ),
                   Text(

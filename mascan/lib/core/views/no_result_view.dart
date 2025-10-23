@@ -18,7 +18,7 @@ class NoResultView extends StatelessWidget {
                 Icon(Icons.search_off, size: 64, color: Colors.grey.shade400),
                 Gap(16),
                 Text(
-                  'No results found',
+                  'Hasil tidak ditemukan',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),

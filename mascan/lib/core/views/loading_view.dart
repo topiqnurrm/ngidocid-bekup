@@ -17,7 +17,7 @@ class LoadingView extends StatelessWidget {
               ? CupertinoActivityIndicator(radius: 16)
               : CircularProgressIndicator(),
           Text(
-            message ?? 'Loading data...',
+            message ?? 'Memuat data...',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),

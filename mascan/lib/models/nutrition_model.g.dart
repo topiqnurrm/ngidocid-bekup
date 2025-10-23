@@ -1,10 +1,10 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+
 
 part of 'nutrition_model.dart';
 
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
+
+
+
 
 Nutrition _$NutritionFromJson(Map<String, dynamic> json) => Nutrition(
   calories: (json['calories'] as num).toInt(),

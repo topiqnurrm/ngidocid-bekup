@@ -75,7 +75,7 @@ Future<bool?> showConfirmDialog({
   required String title,
   required String content,
   String confirmText = 'Confirm',
-  String cancelText = 'Cancel',
+  String cancelText = 'Batal',
 }) {
   return showPlatformDialog<bool>(
     context: context,
@@ -104,7 +104,7 @@ Future<void> showInfoDialog({
 
 Future<void> showErrorDialog({
   required BuildContext context,
-  String title = 'Error',
+  String title = 'Kesalahan',
   required String content,
   String buttonText = 'OK',
 }) {

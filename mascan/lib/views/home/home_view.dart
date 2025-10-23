@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mascan/core/utils/show_dialog.dart';
 import 'package:mascan/core/widgets/app_scaffold.dart';
-import 'package:mascan/views/home/widgets/faded_image_carousel.dart';
 import 'package:mascan/views/home/widgets/method_card.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -71,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
         children: [
           Gap(4),
           Icon(
-            IonIcons.fast_food,
+            Icons.food_bank,
             color: Theme.of(context).colorScheme.primary,
           ),
           Text("mascan"),
@@ -87,10 +86,10 @@ class _HomeViewState extends State<HomeView> {
           onPressed: () {
             showInfoDialog(
               context: context,
-              title: 'About',
+              title: 'Tentang',
               content:
-                  'This app is designed to recognize different types of food with descriptions, recipe, and nutrition facts.',
-              buttonText: 'Dismiss',
+                  'Aplikasi ini adalah alat pintar untuk mengenali berbagai jenis makanan. Setelah mengenali makanan, aplikasi akan memberikan deskripsi lengkap, resep masakan, dan informasi nutrisi.',
+              buttonText: 'Kembali',
             );
           },
         ),
@@ -102,41 +101,34 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Gap(12),
             Text(
-              'Welcome!',
+              'Selamat Datang !',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
             Text(
-              'Recognize different types of food.',
+              'Silahkan foto makanan anda',
               style: Theme.of(context).textTheme.bodyMedium!,
             ),
 
             Gap(4),
-            FadedImageCarousel(),
-            Gap(4),
-
-            Text(
-              'What method would you like to use?',
-              style: Theme.of(context).textTheme.bodyMedium!,
-            ),
 
             MethodCard(
               assetPath: 'assets/images/take_picture.svg',
-              title: 'Camera',
-              description: 'Use your camera to take a picture of the food.',
+              title: 'Kamera',
+              description: 'Ambil gambar dengan kamera',
               onTap: () => Navigator.of(context).pushNamed('/camera'),
             ),
 
             MethodCard(
               assetPath: 'assets/images/pick_image.svg',
-              title: 'Gallery',
-              description: 'Select an image from your gallery.',
+              title: 'Galeri',
+              description: 'Pilih gambar dari galeri',
               onTap: _openGallery,
             ),
 
-            Gap(32),
+            Gap(420),
             Center(
               child: Column(
                 spacing: 2,
