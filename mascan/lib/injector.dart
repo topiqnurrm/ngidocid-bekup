@@ -1,6 +1,6 @@
 import 'package:auto_injector/auto_injector.dart';
 import 'package:dio/dio.dart';
-import 'package:mascan/core/configs.dart';
+import 'package:mascan/init/configs.dart';
 import 'package:mascan/services.dart';
 
 final injector = AutoInjector();

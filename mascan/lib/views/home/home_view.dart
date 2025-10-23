@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/utils.dart';
-import 'package:mascan/core/widgets.dart';
+import 'package:mascan/init/utils.dart';
+import 'package:mascan/init/widgets.dart';
 import 'package:mascan/views/home/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_plus/icons_plus.dart';

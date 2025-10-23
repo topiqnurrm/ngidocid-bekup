@@ -3,8 +3,8 @@ import 'package:mascan/models.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mascan/core/theme.dart';
-import 'package:mascan/viewmodels/modelsview.dart';
+import 'package:mascan/init/theme.dart';
+import 'package:mascan/seemodel/modelsview.dart';
 import 'package:gap/gap.dart';
 
 class IngredientsList extends StatelessWidget {

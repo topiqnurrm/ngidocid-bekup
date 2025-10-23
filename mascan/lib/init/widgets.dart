@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/theme.dart';
+import 'package:mascan/init/theme.dart';
 
 class AppScaffold extends StatelessWidget {
   final Widget? title;

@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mascan/core/views.dart';
-import 'package:mascan/core/widgets.dart';
+import 'package:mascan/init/views.dart';
+import 'package:mascan/init/widgets.dart';
 import 'package:mascan/models.dart';
-import 'package:mascan/viewmodels/modelsview.dart';
-import 'package:mascan/viewmodels/states.dart';
-import 'package:mascan/views/inference_result/widgets.dart';
+import 'package:mascan/seemodel/modelsview.dart';
+import 'package:mascan/seemodel/states.dart';
+import 'package:mascan/views/hasil/widgets.dart';
 import 'package:gap/gap.dart';
 
 class InferenceResultView extends ConsumerStatefulWidget {

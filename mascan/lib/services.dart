@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mascan/core/configs.dart';
+import 'package:mascan/init/configs.dart';
 import 'package:mascan/models.dart';
 
 import 'dart:io';

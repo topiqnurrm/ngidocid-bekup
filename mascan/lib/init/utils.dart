@@ -3,7 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mascan/core/theme.dart';
+import 'package:mascan/init/theme.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
