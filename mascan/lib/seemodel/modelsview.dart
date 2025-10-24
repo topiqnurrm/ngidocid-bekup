@@ -102,16 +102,16 @@ class LiteRtViewModel extends StateNotifier<LiteRtViewModelState> {
 }
 
 final firebaseMlServiceProvider = Provider<FirebaseMlService>((ref) {
-  return injector.get<FirebaseMlService>();
+  return di.get<FirebaseMlService>();
 });
 final liteRtServiceProvider = Provider<LiteRtService>((ref) {
-  return injector.get<LiteRtService>();
+  return di.get<LiteRtService>();
 });
 final apiServiceProvider = Provider<ApiService>((ref) {
-  return injector.get<ApiService>();
+  return di.get<ApiService>();
 });
 final geminiServiceProvider = Provider<GeminiService>((ref) {
-  return injector.get<GeminiService>();
+  return di.get<GeminiService>();
 });
 final liteRtViewModelProvider =
 StateNotifierProvider<LiteRtViewModel, LiteRtViewModelState>((ref) {

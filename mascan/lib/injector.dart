@@ -3,18 +3,21 @@ import 'package:dio/dio.dart';
 import 'package:mascan/init/configs.dart';
 import 'package:mascan/services.dart';
 
-final injector = AutoInjector();
+final di = AutoInjector();
 
-void setupInjector() {
-  injector.addSingleton<FirebaseMlService>(() => FirebaseMlService());
-  injector.addSingleton<Dio>(() => DioConfig.createDio());
+void initializeDependencies() {
+  // Registrasi singleton untuk layanan utama
+  di.addSingleton<FirebaseMlService>(() => FirebaseMlService());
+  di.addSingleton<Dio>(() => DioConfig.createDio());
 
-  injector.add<LiteRtService>(
-    () => LiteRtService(injector.get<FirebaseMlService>()),
+  // Registrasi layanan lain yang membutuhkan dependency
+  di.add<LiteRtService>(
+        () => LiteRtService(di.get<FirebaseMlService>()),
   );
 
-  injector.add<ApiService>(() => ApiService(injector.get<Dio>()));
-  injector.add<GeminiService>(() => GeminiService());
+  di.add<ApiService>(() => ApiService(di.get<Dio>()));
+  di.add<GeminiService>(() => GeminiService());
 
-  injector.commit();
+  // Komit konfigurasi dependency injector
+  di.commit();
 }

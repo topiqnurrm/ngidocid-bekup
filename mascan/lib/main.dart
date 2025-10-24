@@ -14,8 +14,8 @@ import 'package:mascan/views/hasil/hasil_scan.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  setupInjector();
+  await Firebase.initializeApp(options: FirebaseConfig.platformOptions);
+  initializeDependencies();
 
   runApp(const ProviderScope(child: FoodRecognizerApp()));
 }
